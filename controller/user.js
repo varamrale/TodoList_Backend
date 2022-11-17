@@ -5,10 +5,13 @@ const crypto = require('crypto');
 const logger = require('../logger');
 
 
+
+//Home Page..
 exports.home = BigPromise((req,res)=>{
     res.json({message:"Hello From Vaibhav"});
 })
 
+//Sign Up..
 exports.signup = BigPromise(async(req,res,next)=>{
     const {name,email,password} = req.body;
     if(!email){
@@ -28,7 +31,7 @@ exports.signup = BigPromise(async(req,res,next)=>{
 
 })
 
-
+//Sign In
 exports.signin = BigPromise(async (req, res, next) => {
     const { email, password } = req.body;
   
@@ -51,6 +54,7 @@ exports.signin = BigPromise(async (req, res, next) => {
   });
 
 
+  //Create Todo
 exports.createTodo = BigPromise(async(req,res,next)=>{
     console.log("userTitle")
 const {todoTitle} = req.body;
@@ -68,8 +72,10 @@ let userTitle = userModel.findByIdAndUpdate(userId,{
 cookieToken(user, res);
 });
 
+
+//Update Todo
 exports.updateTodo = BigPromise(async(req,res,next)=>{
-    const userId = req.params.userId;
+    const{ userId} = req.params
     const { todoTitle } = req.body;
     let userTitle = userModel.findByIdAndUpdate(userId,{
         $set:{ title:todoTitle},
@@ -84,11 +90,13 @@ exports.updateTodo = BigPromise(async(req,res,next)=>{
       res.send(userTitle);
     });
 
+//Get All Todo    
 exports.getTodoList= BigPromise(async(req,res,next)=>{
 const userList =await userModel.find().limit(6);
 res.send(userList);
 });
 
+//Delete Todo
 exports.deleteTodo = BigPromise(async(req,res,next)=>{
     const userId = req.params.userId;
     let userTitle = userModel.findByIdAndDelete(userId,function(err,docs){
